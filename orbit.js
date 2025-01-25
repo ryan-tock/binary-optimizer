@@ -12,11 +12,11 @@ export class Orbit {
         this.predicted_positions = [];
     }
 
-    *calculate_mean_anomaly(t) {
+    calculate_mean_anomaly(t) {
         return this.m_0 + (2 * Math.PI / this.p) * (t - 2000);
     }
 
-    *calculate_eccentric_anomaly(t) {
+    calculate_eccentric_anomaly(t) {
         const mean_anomaly = this.calculate_mean_anomaly(t);
         var guess = mean_anomaly;
 
@@ -27,11 +27,11 @@ export class Orbit {
         return guess;
     }
 
-    *calculate_true_anomaly(eccentric_anomaly) {
+    calculate_true_anomaly(eccentric_anomaly) {
         return eccentric_anomaly + 2 * Math.atan(this.beta * Math.sin(eccentric_anomaly) / (1 - this.beta * Math.cos(eccentric_anomaly)));
     }
 
-    *calculate_pos_scaled(t) {
+    calculate_pos_scaled(t) {
         var eccentric_anomaly = this.calculate_eccentric_anomaly(t);
         var true_anomaly = this.calculate_true_anomaly(eccentric_anomaly);
 
@@ -53,10 +53,10 @@ export class Orbit {
         var resultant = 0;
 
         for (const i in data) {
-            t = data[i]['t'];
-            x_actual = data[i]['x'];
-            y_actual = data[i]['y'];
-            weight = data[i]['weight'];
+            var t = data[i]['t'];
+            var x_actual = data[i]['x'];
+            var y_actual = data[i]['y'];
+            var weight = data[i]['weight'];
 
             var pos_predict = this.calculate_pos_scaled(t);
             this.predicted_positions.push(pos_predict)
@@ -82,16 +82,13 @@ export class Orbit {
 
     calculate_error(data) {
         var error = 0;
+
         for (const i in data) {
             error += (data[i]['x'] - this.sm * this.predicted_positions[i][0]) ** 2 * data[i]['weight'];
             error += (data[i]['y'] - this.sm * this.predicted_positions[i][1]) ** 2 * data[i]['weight'];
         }
 
         return error;
-    }
-
-    calculate_r_squared(data) {
-        return 0;
     }
 
 }

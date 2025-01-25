@@ -6,7 +6,7 @@
         "threeDMode": true,
         "worldRotation3D": [0.8331748870859871, 0.5143904492508126, 0.20303219756677293, -0.49976579276876476, 0.857556100625224, -0.12178541233933128, -0.23675675261215606, 0, 0.9715689579708342],
         "axis3D": [0, 0, -0.9999999999989012],
-        "speed3D": 0.4937390817364284,
+        "speed3D": 0,
         "showPlane3D": false,
         "product": "graphing-3d"
     },
@@ -16,7 +16,7 @@
             { "type": "text", "id": "32", "folderId": "33", "text": "a: Semi Major Axis\ne0: Eccentricity\ni: Inclination\nΩ: Longitude of the Ascending Node\n⍵: Argument of Periapsis\nM0: Mean anomaly on Jan 1, 2000\np: Period" },
             { "type": "expression", "id": "1", "folderId": "33", "color": "#c74440", "latex": "a_{input}=0.2322832955380274", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "1" } },
             { "type": "expression", "id": "2", "folderId": "33", "color": "#2d70b3", "latex": "e_{0}=0.2620073292357086", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "0.95" } },
-            { "type": "expression", "id": "3", "folderId": "33", "color": "#388c46", "latex": "i=0.7197047499080239", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "2\\pi" } },
+            { "type": "expression", "id": "3", "folderId": "33", "color": "#388c46", "latex": "i=0.7197047499080239", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "\\pi" } },
             { "type": "expression", "id": "4", "folderId": "33", "color": "#6042a6", "latex": "\\Omega=0.7736526929553813", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "2\\pi" } },
             { "type": "expression", "id": "5", "folderId": "33", "color": "#aaaaaa", "latex": "\\omega=2.536428919457987", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "2\\pi" } },
             { "type": "expression", "id": "6", "folderId": "33", "color": "#c74440", "latex": "M_{0}=0.2832066913851504", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "2\\pi" } },
