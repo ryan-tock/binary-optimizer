@@ -240,7 +240,7 @@ async function graph_data() {
 
     workers = [];
     for (let i=0; i<threads; i++) {
-        workers.push(new Worker("./differential-evolution.js?cacheBust=" + Date.now(), { type: 'module' }));
+        workers.push(new Worker("./differential-evolution.js", { type: 'module' }));
     }
 
     last_switched = Date.now();

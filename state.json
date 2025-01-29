@@ -38,7 +38,7 @@
                 "type": "text",
                 "id": "148",
                 "folderId": "73",
-                "text": "For point color\n0 => Color all points the same\n1 => Color points according to a gradient with respect to observation time\n2 => Color points with respect to the weights\n3 => Color points according to observation type (__ => __, __ => __, __ => __)"
+                "text": "For point color\n0 => Color all points the same\n1 => Color points according to a gradient with respect to observation time\n2 => Color points with respect to the weights\n3 => Color points according to observation type (Historical => Green, Camera => Pink, Speckle => Blue)"
             },
             { "type": "expression", "id": "146", "folderId": "73", "color": "#c74440", "latex": "p_{ointColor}=1", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "3", "step": "1" } },
             {
