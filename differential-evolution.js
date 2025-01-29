@@ -1,10 +1,8 @@
 import _ from 'https://cdn.skypack.dev/lodash';
-import { render_orbit } from "./main.js"
+import { Orbit } from "./orbit.js"
 
 //  Test functions
 // https://en.wikipedia.org/wiki/Test_functions_for_optimization
-
-
 
 function ensure_bounds(vec, bounds) {
     const vec_new = []
@@ -29,17 +27,13 @@ function create_population(bounds) {
         for (let j in _.range(bounds.length)) {
             indv.push(bounds[j][0] + Math.random()*(bounds[j][1] - bounds[j][0]))
         }
-        indv[5] = bounds[5][0] + Math.random() / 10.0 * (bounds[5][1] - bounds[5][0])
         population.push(indv)
     }
 
     return population;
 }
 
-function recursive_differential(population, cost_func, bounds, popsize, mutate, recombination, maxiter, iter, best) {
-    if (iter >= maxiter) {
-        return;
-    }
+function differential_step(population, cost_func, bounds, popsize, mutate, recombination) {
 
     var gen_scores = [] // score keeping
 
@@ -91,31 +85,63 @@ function recursive_differential(population, cost_func, bounds, popsize, mutate, 
         }
     }
 
-    let gen_best = _.min(gen_scores);
-    let gen_sol = population[gen_scores.indexOf(gen_best)];
-    if (gen_best < best) {
-        best = gen_best;
-        render_orbit(gen_sol);
-        setTimeout(function() {recursive_differential(population, cost_func, bounds, popsize, mutate, recombination, maxiter, iter + 1, best);}, 40);
-    } else {
-        recursive_differential(population, cost_func, bounds, popsize, mutate, recombination, maxiter, iter + 1, best);
-    }
+    return [population, gen_scores];
+
+    
 }
 
 
 //--- CONSTANTS ----------------------------------------------------------------+
 
-const popsize = 60                        // Population size, must be >= 4
+const popsize = 20
 const mutate = 0.5                        // Mutation factor [0,2]
 const recombination = 0.7                 // Recombination rate [0,1]
-const maxiter = 2000                        // Max number of generations (maxiter)
+var data = [];
 
-export function optimize_func(func, bounds) {
-    var starting_pop = create_population(bounds);
+export function orbit_from_vector(x) {
+    var e = x[0];
+    var i = x[1];
+    var node = x[2];
+    var periapsis = x[3];
+    var m_0 = x[4];
+    var p = x[5];
 
-    for (const i in starting_pop) {
-        starting_pop[i][5] /= 5;
+    var orbit = new Orbit(e, i, node, periapsis, m_0, p);
+    orbit.optimize_sm(data);
+    return orbit;
+}
+function test_orbit(x) {
+    var orbit = orbit_from_vector(x);
+    return orbit.calculate_error(data);
+}
+
+onmessage = (e) => {
+    var bounds = e.data[0];
+    var maxiter = e.data[1];
+    data = e.data[2];
+
+    var population = create_population(bounds);
+    for (const i in population) {
+        population[i][5] /= 10.0;
     }
 
-    recursive_differential(starting_pop, func, bounds, popsize, mutate, recombination, maxiter, 0, 1000000000);
+    var scores = [];
+    var bestScore = 1000000000;
+    var bestPop = [];
+
+    for (const i in _.range(maxiter)) {
+        var step_result = differential_step(population, test_orbit, bounds, popsize, mutate, recombination);
+        population = step_result[0];
+        scores = step_result[1];
+        let gen_best = _.min(scores);
+        let gen_sol = population[scores.indexOf(gen_best)];
+
+        if (gen_best < bestScore) {
+            bestScore = gen_best;
+            bestPop = gen_sol;
+            postMessage(["best", [bestPop, bestScore]]);
+        }
+    }
+
+    postMessage(["done", []]);
 }

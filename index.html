@@ -13,8 +13,12 @@
     <main>
         <h1>Binary Orbit Optimizer</h1>  
     </main>
+    <h3>Upload a JSON data file</h3>  
+    <input type="file" id="file-input" accept=".json">
+    <select id="key-dropdown" disabled>
+      <option value="">Select an Orbit</option>
+    </select>
     <script src="https://www.desmos.com/api/v1.10/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
-    <div id="calculator" style="width: 1200px; height: 800px;"></div>
     <script src="desmos_utils.js" type="module"></script>
     <script src="main.js" type="module"></script>
   </body>

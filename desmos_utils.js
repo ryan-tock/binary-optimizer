@@ -37,6 +37,18 @@ export function scale_viewport(state, orbit, data) {
     state['graph']['viewport']['zmax'] = num;
 }
 
+export function set_secret(state, secret) {
+    let expressions = state['expressions']['list'];
+    for (const i in expressions) {
+        if (expressions[i].type == 'folder' && expressions[i].title != 'Orbital Parameters') {
+            expressions[i].secret = secret;
+        }
+        if (expressions[i].type == 'text') {
+            expressions[i].secret = secret;
+        }
+    }
+}
+
 export function read_data(state) {
     var data = [];
 
