@@ -8,7 +8,8 @@
         "axis3D": [0, 0, -0.9999999999989012],
         "speed3D": 0,
         "showPlane3D": false,
-        "product": "graphing-3d"
+        "product": "graphing-3d",
+        "degreeMode":true
     },
     "expressions": {
         "list": [
@@ -16,10 +17,10 @@
             { "type": "text", "id": "32", "folderId": "33", "text": "a: Semi Major Axis\ne0: Eccentricity\ni: Inclination\nΩ: Longitude of the Ascending Node\n⍵: Argument of Periapsis\nM0: Mean anomaly on Jan 1, 2000\np: Period" },
             { "type": "expression", "id": "1", "folderId": "33", "color": "#c74440", "latex": "a_{input}=0", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "1" } },
             { "type": "expression", "id": "2", "folderId": "33", "color": "#2d70b3", "latex": "e_{0}=0", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "0.95" } },
-            { "type": "expression", "id": "3", "folderId": "33", "color": "#388c46", "latex": "i=0", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "\\pi" } },
-            { "type": "expression", "id": "4", "folderId": "33", "color": "#6042a6", "latex": "\\Omega=0", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "2\\pi" } },
-            { "type": "expression", "id": "5", "folderId": "33", "color": "#aaaaaa", "latex": "\\omega=0", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "2\\pi" } },
-            { "type": "expression", "id": "6", "folderId": "33", "color": "#c74440", "latex": "M_{0}=0", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "2\\pi" } },
+            { "type": "expression", "id": "3", "folderId": "33", "color": "#388c46", "latex": "i=0", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "180" } },
+            { "type": "expression", "id": "4", "folderId": "33", "color": "#6042a6", "latex": "\\Omega=0", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "360" } },
+            { "type": "expression", "id": "5", "folderId": "33", "color": "#aaaaaa", "latex": "\\omega=0", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "360" } },
+            { "type": "expression", "id": "6", "folderId": "33", "color": "#c74440", "latex": "M_{0}=0", "slider": { "hardMin": true, "hardMax": true, "min": "0", "max": "360" } },
             { "type": "expression", "id": "7", "folderId": "33", "color": "#2d70b3", "latex": "p=1", "slider": { "hardMin": true, "hardMax": true, "min": "1", "max": "1000" } },
             { "type": "expression", "id": "111", "folderId": "33", "color": "#c74440", "latex": "R_{squared}" },
             { "type": "folder", "id": "128", "title": "Data Fixing", "collapsed": true },
@@ -61,7 +62,7 @@
             { "type": "folder", "id": "51", "title": "Formulas", "collapsed": true },
             { "type": "expression", "id": "93", "folderId": "51", "color": "#2d70b3", "latex": "a=\\left\\{a_{utoFitSemiMajorAxis}=1:a_{best},a_{input}\\right\\}" },
             { "type": "text", "id": "114", "folderId": "51", "text": "Mean Anomaly" },
-            { "type": "expression", "id": "23", "folderId": "51", "color": "#388c46", "latex": "M\\left(t\\right)=M_{0}+\\frac{2\\pi}{p}\\left(t-2000\\right)" },
+            { "type": "expression", "id": "23", "folderId": "51", "color": "#388c46", "latex": "M\\left(t\\right)=M_{0}+\\frac{360}{p}\\left(t-2000\\right)" },
             { "type": "text", "id": "119", "folderId": "51", "text": "Recursive Newton-Raphson iterator for eccentric anomaly" },
             {
                 "type": "expression",
@@ -89,14 +90,14 @@
                 "id": "8",
                 "folderId": "51",
                 "color": "#388c46",
-                "latex": "x_{1}\\left(r,f\\right)=r\\left(\\cos\\left(f+\\omega\\right)\\cos\\left(\\Omega-\\frac{3\\pi}{2}\\right)-\\cos\\left(i\\right)\\sin\\left(f+\\omega\\right)\\sin\\left(\\Omega-\\frac{3\\pi}{2}\\right)\\right)"
+                "latex": "x_{1}\\left(r,f\\right)=r\\left(\\cos\\left(f+\\omega\\right)\\cos\\left(\\Omega-270\\right)-\\cos\\left(i\\right)\\sin\\left(f+\\omega\\right)\\sin\\left(\\Omega-270\\right)\\right)"
             },
             {
                 "type": "expression",
                 "id": "9",
                 "folderId": "51",
                 "color": "#6042a6",
-                "latex": "y_{1}\\left(r,f\\right)=r\\left(\\cos\\left(i\\right)\\sin\\left(f+\\omega\\right)\\cos\\left(\\Omega-\\frac{3\\pi}{2}\\right)+\\cos\\left(f+\\omega\\right)\\sin\\left(\\Omega-\\frac{3\\pi}{2}\\right)\\right)"
+                "latex": "y_{1}\\left(r,f\\right)=r\\left(\\cos\\left(i\\right)\\sin\\left(f+\\omega\\right)\\cos\\left(\\Omega-270\\right)+\\cos\\left(f+\\omega\\right)\\sin\\left(\\Omega-270\\right)\\right)"
             },
             { "type": "expression", "id": "20", "folderId": "51", "color": "#aaaaaa", "latex": "z_{1}\\left(r,f\\right)=r\\sin\\left(f+\\omega\\right)\\sin\\left(i\\right)" },
             {

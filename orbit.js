@@ -1,4 +1,15 @@
 const NEWTON_ITERATIONS = 6
+
+function sin(d) {
+    return Math.sin(d * Math.PI / 180);
+}
+function cos(d) {
+    return Math.cos(d * Math.PI / 180);
+}
+function atan(d) {
+    return Math.atan(d * Math.PI / 180)
+}
+
 export class Orbit {
     constructor(e, i, node, periapsis, m_0, p) {
         this.e = e;
@@ -13,7 +24,7 @@ export class Orbit {
     }
 
     calculate_mean_anomaly(t) {
-        return this.m_0 + (2 * Math.PI / this.p) * (t - 2000);
+        return this.m_0 + (360 / this.p) * (t - 2000);
     }
 
     calculate_eccentric_anomaly(t) {
@@ -21,29 +32,29 @@ export class Orbit {
         var guess = mean_anomaly;
 
         for (let i=0; i<NEWTON_ITERATIONS; i++) {
-            guess = guess + (mean_anomaly - guess + this.e * Math.sin(guess)) / (1 - this.e * Math.cos(guess));
+            guess = guess + (mean_anomaly - guess + this.e * sin(guess)) / (1 - this.e * cos(guess));
         }
 
         return guess;
     }
 
     calculate_true_anomaly(eccentric_anomaly) {
-        return eccentric_anomaly + 2 * Math.atan(this.beta * Math.sin(eccentric_anomaly) / (1 - this.beta * Math.cos(eccentric_anomaly)));
+        return eccentric_anomaly + 2 * atan(this.beta * sin(eccentric_anomaly) / (1 - this.beta * cos(eccentric_anomaly)));
     }
 
     calculate_pos_scaled(t) {
         var eccentric_anomaly = this.calculate_eccentric_anomaly(t);
         var true_anomaly = this.calculate_true_anomaly(eccentric_anomaly);
 
-        var radius_scaled = 1 - this.e * Math.cos(eccentric_anomaly);
+        var radius_scaled = 1 - this.e * cos(eccentric_anomaly);
 
-        var planar_angles = [Math.cos(true_anomaly + this.periapsis), Math.sin(true_anomaly + this.periapsis)];
-        var node_angles = [Math.cos(this.node - 3 * Math.PI / 2), Math.sin(this.node - 3 * Math.PI / 2)];
-        var inclined_angle = Math.cos(this.i);
+        var planar_angles = [cos(true_anomaly + this.periapsis), sin(true_anomaly + this.periapsis)];
+        var node_angles = [cos(this.node - 270), sin(this.node - 270)];
+        var inclined_angle = cos(this.i);
 
         var x = radius_scaled * (planar_angles[0] * node_angles[0] - inclined_angle * planar_angles[1] * node_angles[1]);
         var y = radius_scaled * (inclined_angle * planar_angles[1] * node_angles[0] + planar_angles[0] * node_angles[1]);
-        var z = radius_scaled * planar_angles[1] * Math.sin(this.i);
+        var z = radius_scaled * planar_angles[1] * sin(this.i);
 
         return [x, y, z]
     }

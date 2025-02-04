@@ -13,6 +13,14 @@ var state = await fetchJSON("state.json");
 
 const fileInput = document.getElementById("file-input");
 const keyDropdown = document.getElementById("key-dropdown");
+const changeTitle = document.getElementById("change-title");
+const changeBox = document.getElementById("change-box");
+
+changeTitle.style.display = "none";
+changeBox.style.display = "none";
+
+changeBox.style.width = "800px";
+changeBox.style.height = "300px";
 
 var jsonData = {};
 
@@ -57,6 +65,7 @@ keyDropdown.addEventListener('change', (event) => {
     if (key && key != "Select an Orbit") {
         jsonData[key]['data'] = data;
     }
+    changeBox.value = "";
 
     key = event.target.value;
 
@@ -73,13 +82,15 @@ var calculators = [];
 var calculator = 0;
 var workers = [];
 var threads = 7;
-var orbit_bounds = [[0, 0.95], [0, Math.PI], [0, 2 * Math.PI], [0, 2 * Math.PI], [0, 2 * Math.PI], [1, 1000]];
+var orbit_bounds = [[0, 0.95], [0, 180], [0, 360], [0, 360], [0, 360], [1, 1000]];
 
 var last_switched = 0;
 var recent_fit;
 var finished_threads = 0;
 
 function setup_calculator() {
+    changeBox.style.display = "";
+    changeTitle.style.display = "";
     for (const i in [0,1]) {
         const newDiv = document.createElement('div');
         const id = +i + 1
@@ -87,7 +98,7 @@ function setup_calculator() {
         newDiv.style.width = "1200px";
         newDiv.style.height = "800px";
 
-        document.body.appendChild(newDiv);
+        document.body.insertBefore(newDiv, changeTitle);
     }
 
     var elt1 = document.getElementById('calculator1');
@@ -109,8 +120,8 @@ function setup_calculator() {
     calculator1.setState(state);
     calculator2.setState(state);
 
-    calculator1.observeEvent('change', check_refit);
-    calculator2.observeEvent('change', check_refit);
+    calculator1.observeEvent('change', check_change);
+    calculator2.observeEvent('change', check_change);
 
     return calculators, elements;
 }
@@ -209,14 +220,18 @@ function parse_worker_message(e) {
     }
 }
 
-function check_refit() {
+function check_change() {
     state = calculators[calculator].getState();
     var refit_line = find_expression(state, "r_{efit}=");
-    if (state['expressions']['list'][refit_line]['latex'] != "r_{efit}=1") {
-        return false;
+    if (state['expressions']['list'][refit_line]['latex'] == "r_{efit}=1") {
+        state['expressions']['list'][refit_line]['latex'] = "r_{efit}=0";
+        refit(state);
     }
+}
+
+function refit(state) {
+    var old_data = data;
     data = read_data(state);
-    state['expressions']['list'][refit_line]['latex'] = "r_{efit}=0";
 
     delete_calculator();
     calculators, elements = setup_calculator();
@@ -227,6 +242,39 @@ function check_refit() {
     finished_threads = 0;
 
     fit_with_workers();
+
+    var new_data_index = 0;
+    for (const i in old_data) {
+        var curr_t = old_data[i]['t'];
+        var curr_x = old_data[i]['x'];
+        var curr_y = old_data[i]['y'];
+        if (curr_t == data[new_data_index]['t']) {
+            if (curr_x == data[new_data_index]['x'] && curr_y == data[new_data_index]['y']) {
+                new_data_index += 1;
+                continue;
+            }
+            if (changeBox.value != "") {
+                changeBox.value += "\n";
+            }
+            changeBox.value += "FLIPPED "
+            var flipped = [];
+            if (curr_x != data[new_data_index]['x']) {
+                flipped.push("X");
+            }
+            if (curr_y != data[new_data_index]['y']) {
+                flipped.push("Y")
+            }
+            changeBox.value += flipped;
+            changeBox.value += " ON { t=" + curr_t + ", x=" + data[new_data_index]['x'] + ", y=" + data[new_data_index]['y'] + " }";
+
+            new_data_index += 1;
+        } else {
+            if (changeBox.value != "") {
+                changeBox.value += "\n";
+            }
+            changeBox.value += "REMOVED { t=" + curr_t + ", x=" + curr_x + ", y=" + curr_y +" }"
+        }
+    }
 }
 
 async function graph_data() {
