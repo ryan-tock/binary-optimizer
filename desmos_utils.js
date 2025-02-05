@@ -85,16 +85,16 @@ export function set_orbit(state, orbit, data) {
     state['expressions']['list'][e]['latex'] = 'e_{0}=' + orbit.e;
 
     let i = find_expression(state, 'i=');
-    state['expressions']['list'][i]['latex'] = 'i=' + orbit.i;
+    state['expressions']['list'][i]['latex'] = 'i=' + orbit.i * 180 / Math.PI;
 
     let O = find_expression(state, '\\Omega=');
-    state['expressions']['list'][O]['latex'] = '\\Omega=' + orbit.node;
+    state['expressions']['list'][O]['latex'] = '\\Omega=' + orbit.node * 180 / Math.PI;
 
     let o = find_expression(state, '\\omega=');
-    state['expressions']['list'][o]['latex'] = '\\omega=' + orbit.periapsis;
+    state['expressions']['list'][o]['latex'] = '\\omega=' + orbit.periapsis * 180 / Math.PI;
 
     let M = find_expression(state, 'M_{0}=');
-    state['expressions']['list'][M]['latex'] = 'M_{0}=' + orbit.m_0;
+    state['expressions']['list'][M]['latex'] = 'M_{0}=' + orbit.m_0 * 180 / Math.PI;
 
     let p = find_expression(state, 'p=');
     state['expressions']['list'][p]['latex'] = 'p=' + orbit.p;

@@ -82,7 +82,7 @@ var calculators = [];
 var calculator = 0;
 var workers = [];
 var threads = 7;
-var orbit_bounds = [[0, 0.95], [0, 180], [0, 360], [0, 360], [0, 360], [1, 1000]];
+var orbit_bounds = [[0, 0.95], [0, Math.PI], [0, 2 * Math.PI], [0, 2 * Math.PI], [0, 2 * Math.PI], [1, 1000]];
 
 var last_switched = 0;
 var recent_fit;
